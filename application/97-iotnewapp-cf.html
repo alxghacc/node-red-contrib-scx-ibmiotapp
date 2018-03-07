@@ -652,7 +652,7 @@
 			authentication: {value:"quickstart"},
 			apiKey: {type:"ibmiot", validate: validateAuthorization},
 			inputType: {value:"evt"},
-			logicalInterfaceId: {value:""},
+			logicalInterface: {value:""},
 			ruleId: {value:""},
 			deviceId: {value:""},
 			applicationId: {value:""},
@@ -665,6 +665,7 @@
 			allDevices: {value: ""},
 			allApplications: {value: ""},
 			allDeviceTypes: {value: ""},
+			allLogicalInterfaces: {value: ""},
 			allEvents: {value: ""},
 			allCommands: {value: ""},
 			allFormats: {value: ""},
@@ -683,18 +684,14 @@
 		oneditprepare: function() {
 
 			var hideAllRuleInput = function() {
-				$('#node-input-logicalInterfaceLabel').hide();
-				$("#node-input-allLogicalInterfaces").val('');
+				$('#node-input-logicalInterfaceLabel').hide();				
 				$("#node-input-allLogicalInterfaces").hide();
-				$("#node-input-allLogicalInterfacesLabel").hide();
-				$("#node-input-logicalInterface").val('');
+				$("#node-input-allLogicalInterfacesLabel").hide();				
 				$("#node-input-logicalInterface").hide();
 
-				$('#node-input-ruleIdLabel').hide();
-				$("#node-input-allRules").val('');
+				$('#node-input-ruleIdLabel').hide();				
 				$("#node-input-allRules").hide();
 				$("#node-input-allRulesLabel").hide();
-				$("#node-input-ruleId").val('');
 				$("#node-input-ruleId").hide();
 			};
 
@@ -863,11 +860,9 @@
 			};
 
 			var showLIInput = function() {
-				$('#node-input-logicalInterfaceLabel').show();
-				$("#node-input-allLogicalInterfaces").prop("checked", true);
+				$('#node-input-logicalInterfaceLabel').show();				
 				$("#node-input-allLogicalInterfaces").show();
 				$("#node-input-allLogicalInterfacesLabel").show();
-				$("#node-input-logicalInterface").val('+');
 				$("#node-input-logicalInterface").show();
 			};
 
@@ -876,10 +871,8 @@
 				showLIInput();
 
 				$('#node-input-ruleIdLabel').show();
-				$("#node-input-allRules").prop("checked", true);
 				$("#node-input-allRules").show();
 				$("#node-input-allRulesLabel").show();
-				$("#node-input-ruleId").val('+');
 				$("#node-input-ruleId").show();
 			};
 
