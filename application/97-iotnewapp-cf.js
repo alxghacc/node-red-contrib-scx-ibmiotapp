@@ -236,7 +236,7 @@ module.exports = function(RED) {
 		node.eventCommandType = ( node.allEventsOrCommands ) ? '+' : nodeCfg.eventCommandType;
 		node.eventType = ( node.allEvents ) ? '+' : nodeCfg.eventType;
 		node.commandType = ( node.allCommands ) ? '+' : nodeCfg.commandType;
-		node.logicalInterfaceId = ( node.allLogicalInterfaces ) ? '+' : nodeCfg.logicalInterfaceId;
+		node.logicalInterface = ( node.allLogicalInterfaces ) ? '+' : nodeCfg.logicalInterface;
 		node.ruleId = ( node.allRules ) ? '+' : nodeCfg.ruleId;
 
 		// if appId is not provided generate random.
@@ -454,10 +454,10 @@ module.exports = function(RED) {
 
 				} else if (that.inputType === "devicestate") {
 					that.client.on("connect", function() {
-						that.client.subscribeToDeviceStateEvents(that.deviceType, that.deviceId, that.logicalInterfaceId, that.qos);
+						that.client.subscribeToDeviceStateEvents(that.deviceType, that.deviceId, that.logicalInterface, that.qos);
 					});
 
-					this.client.on("deviceState", function(deviceTypeId, deviceId, logicalInterfaceId, payload, topic) {
+					this.client.on("deviceState", function(deviceTypeId, deviceId, logicalInterface, payload, topic) {
 						var parsedPayload = "";
 
 						try {
@@ -467,10 +467,11 @@ module.exports = function(RED) {
 						}
 
 						var msg = {
+							"topic" : topic,
 							"deviceType" : deviceTypeId,
 							"deviceId" : deviceId,
-							"logicalInterfaceId" : logicalInterfaceId,							
-							"state" : parsedPayload
+							"logicalInterfaceId" : logicalInterface,							
+							"payload" : parsedPayload
 						};
 
 						that.send(msg);
@@ -490,19 +491,20 @@ module.exports = function(RED) {
 						}
 
 						var msg = {
+							"topic" : topic,
 							"deviceType" : deviceTypeId,
 							"deviceId" : deviceId,												
-							"error" : parsedPayload
+							"payload" : parsedPayload
 						};
 
 						that.send(msg);
 					});
 				} else if (that.inputType === "ruletrig") {
 					that.client.on("connect", function() {
-						that.client.subscribeToRuleTriggerEvents(that.logicalInterfaceId, that.ruleId, that.qos);
+						that.client.subscribeToRuleTriggerEvents(that.logicalInterface, that.ruleId, that.qos);
 					});
 
-					this.client.on("ruleTrigger", function(logicalInterfaceId, ruleId, payload, topic) {
+					this.client.on("ruleTrigger", function(logicalInterface, ruleId, payload, topic) {
 						var parsedPayload = "";
 
 						try {
@@ -512,19 +514,20 @@ module.exports = function(RED) {
 						}
 
 						var msg = {
-							"logicalInterfaceId" : logicalInterfaceId,
+							"topic" : topic,
+							"logicalInterfaceId" : logicalInterface,
 							"ruleId" : ruleId,
-							"state" : parsedPayload
+							"payload" : parsedPayload
 						};
 
 						that.send(msg);
 					});
 				} else if (that.inputType === "ruleerr") {
 					that.client.on("connect", function() {
-						that.client.subscribeToRuleErrorEvents(that.logicalInterfaceId, that.ruleId, that.qos);
+						that.client.subscribeToRuleErrorEvents(that.logicalInterface, that.ruleId, that.qos);
 					});
 
-					this.client.on("ruleError", function(logicalInterfaceId, ruleId, payload, topic) {
+					this.client.on("ruleError", function(logicalInterface, ruleId, payload, topic) {
 						var parsedPayload = "";
 
 						try {
@@ -534,9 +537,10 @@ module.exports = function(RED) {
 						}
 
 						var msg = {
-							"logicalInterfaceId" : logicalInterfaceId,
+							"topic" : topic,
+							"logicalInterfaceId" : logicalInterface,
 							"ruleId" : ruleId,
-							"error" : parsedPayload
+							"payload" : parsedPayload
 						};
 
 						that.send(msg);
